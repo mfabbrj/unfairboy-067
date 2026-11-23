@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TWIN-MU GUI Mockup</title>
+<style>
+  :root{
+    --bg:#121314; --ink:#e9e2cf; --ink2:#a9a393; --amber:#f3a83c; --amberGlow:rgba(243,168,60,.35);
+    --screen:#0d1411;
+  }
+  /* ---------- THEMES (panel only; page chrome stays dark) ---------- */
+  .plugin{ /* 1 · ARDESIA */
+    --pTop:#33404f; --pMid:#2a3442; --pBot:#232b37; --brush:rgba(255,255,255,.018);
+    --label:#e9e2cf; --label2:#a9a393; --h4bg:#2b3543; --secLine:rgba(0,0,0,.55); --tick:#8d8879;
+    --teal:#2ed3c0; --coral:#ff6b7a; --violet:#a98bff; --sun:#ffcf4a; --orange:#ff8a3d; --sky:#4db5ff; --lime:#b6ea5a;
+    --tint:.10;
+  }
+  .plugin.t-crema{ /* 2 · CREMA ANNI '60 */
+    --pTop:#f2e9d3; --pMid:#e9dec3; --pBot:#dccfb0; --brush:rgba(80,60,20,.03);
+    --label:#2b2418; --label2:#6e624a; --h4bg:#e9dec3; --secLine:rgba(60,45,20,.28); --tick:#6e624a;
+    --teal:#12948a; --coral:#e2503a; --violet:#7a5cc9; --sun:#e2a21b; --orange:#e8742a; --sky:#2f7fc4; --lime:#5f9a1c;
+    --tint:.13;
+  }
+  .plugin.t-menta{ /* 3 · VERDE MENTA RETRÒ */
+    --pTop:#b4e0d0; --pMid:#a2d5c3; --pBot:#8cc6b1; --brush:rgba(10,60,50,.03);
+    --label:#123533; --label2:#3a635c; --h4bg:#a2d5c3; --secLine:rgba(10,50,45,.3); --tick:#2f5a53;
+    --teal:#0a6d7a; --coral:#ee5560; --violet:#6a4cc2; --sun:#f0b000; --orange:#f0732a; --sky:#2a5fd0; --lime:#3a8a24;
+    --tint:.14;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Inter,system-ui,sans-serif}
+  .wrap{padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .note{max-width:1100px;width:100%;font-size:13px;color:var(--ink2);line-height:1.5}
+  .themes{max-width:1100px;width:100%;display:flex;gap:8px;flex-wrap:wrap}
+  .themes button{font:600 12px "Segoe UI",sans-serif;letter-spacing:.08em;padding:8px 14px;border-radius:6px;border:1px solid #333;
+    background:#1d1f21;color:var(--ink2);cursor:pointer;display:flex;align-items:center;gap:8px}
+  .themes button.on{color:var(--ink);border-color:var(--amber)}
+  .themes .sw{width:34px;height:14px;border-radius:3px;display:inline-block}
+  .scaler{width:100%;max-width:1100px;aspect-ratio:1100/680;position:relative}
+  .plugin{position:absolute;left:0;top:0;width:1100px;height:680px;transform-origin:0 0;border-radius:10px;overflow:hidden;
+    background:repeating-linear-gradient(90deg,var(--brush) 0 1px,transparent 1px 3px),
+      linear-gradient(180deg,var(--pTop) 0%,var(--pMid) 45%,var(--pBot) 100%);
+    box-shadow:0 20px 60px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.12);}
+  .screw{position:absolute;width:14px;height:14px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#e4e4e4,#7d7f82 60%,#3b3c3e);box-shadow:0 1px 2px rgba(0,0,0,.7)}
+  .screw::after{content:"";position:absolute;left:2px;right:2px;top:6px;height:2px;background:#2b2b2b;transform:rotate(35deg)}
+  .topbar{position:absolute;left:0;right:0;top:0;height:44px;display:flex;align-items:center;gap:10px;padding:0 34px;
+    background:linear-gradient(#1d1f21,#17181a);border-bottom:1px solid #000}
+  .logo{font-weight:800;letter-spacing:.18em;font-size:17px;color:var(--ink)}
+  .logo span{color:var(--coral)}
+  .logo small{font-weight:500;letter-spacing:.12em;font-size:9px;color:var(--ink2);margin-left:8px}
+  .btn{height:24px;padding:0 9px;border-radius:4px;border:1px solid #000;background:linear-gradient(#3a3d41,#2b2d30);
+    color:#e9e2cf;font-size:11px;display:flex;align-items:center;gap:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);white-space:nowrap}
+  .btn.on{color:#1a1206;background:linear-gradient(#f7bd5f,#e39a2c);box-shadow:0 0 10px var(--amberGlow)}
+  .btn.on.c-sky{background:var(--sky);color:#fff;box-shadow:0 0 10px var(--sky)}
+  .btn.on.c-lime{background:var(--lime);color:#fff;box-shadow:0 0 10px var(--lime)}
+  .t-default .btn.on.c-sky,.t-default .btn.on.c-lime{color:#10151a}
+  .preset{flex:0 0 240px;justify-content:space-between;background:#0e0f10;font-size:12px}
+  .preset em{font-style:normal;color:var(--ink2);font-size:10px}
+  .spacer{flex:1}
+  .seg{display:flex}.seg .btn{border-radius:0}.seg .btn:first-child{border-radius:4px 0 0 4px}.seg .btn:last-child{border-radius:0 4px 4px 0}
+  .sec{position:absolute;border:1px solid var(--secLine);border-radius:8px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+  .sec h4{margin:0;position:absolute;top:-8px;left:14px;padding:0 6px;font-size:9px;letter-spacing:.22em;
+    color:var(--label);background:var(--h4bg);font-weight:700;border-radius:3px}
+  .sec h4 i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+  .lbl{font-size:9.5px;letter-spacing:.16em;text-align:center;color:var(--label);font-weight:700}
+  .val{font-size:10px;text-align:center;font-family:Consolas,monospace;margin-top:1px;font-weight:700}
+  .knob{position:absolute;display:flex;flex-direction:column;align-items:center}
+  .vu{position:absolute;border-radius:6px;overflow:hidden;border:2px solid #0b0b0b;box-shadow:inset 0 0 0 1px #555, 0 4px 12px rgba(0,0,0,.45)}
+  .screen{position:absolute;background:var(--screen);border-radius:5px;border:1px solid #000;box-shadow:inset 0 0 18px rgba(0,0,0,.9)}
+  .led{width:7px;height:7px;border-radius:50%;background:#3a1a14;display:inline-block}
+  .mode{position:absolute;display:flex;gap:4px}
+  .mode .btn{height:26px;font-size:10px;letter-spacing:.14em;font-weight:600}
+  .barmeter{position:absolute;width:10px;border-radius:2px;background:#0b0c0d;border:1px solid #000;overflow:hidden}
+  .barmeter i{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(0deg,#5fae55 0%,#9bd16a 60%,#f3c13c 82%,#e0533d 96%)}
+  .tabs{position:absolute;display:flex;gap:2px}
+  .tab{font-size:10px;letter-spacing:.18em;padding:5px 12px;border-radius:4px 4px 0 0;background:rgba(0,0,0,.22);color:var(--label2);font-weight:700}
+  .tab.on{background:rgba(255,255,255,.14);color:var(--lime)}
+  .chip{position:absolute;font-size:9px;letter-spacing:.14em;color:var(--label2);font-weight:700}
+  .legend{max-width:1100px;width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px 18px;font-size:12.5px;color:var(--ink2);line-height:1.45}
+  .legend b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="note"><b style="color:var(--ink)">TWIN-MU — proposte grafiche del pannello (Fase 1).</b>
+    Tre varianti di colore sulla stessa disposizione; il layout, le manopole e i meter non cambiano. Dimensione base 1100×680 (scala 100%).</div>
+
+  <div class="themes" id="themes">
+    <button data-t="t-default" class="on"><span class="sw" style="background:linear-gradient(90deg,#2a3442 40%,#2ed3c0 40% 60%,#ff6b7a 60% 80%,#b6ea5a 80%)"></span>1 · ARDESIA</button>
+    <button data-t="t-crema"><span class="sw" style="background:linear-gradient(90deg,#e9dec3 40%,#12948a 40% 60%,#e2503a 60% 80%,#e2a21b 80%)"></span>2 · CREMA ANNI '60</button>
+    <button data-t="t-menta"><span class="sw" style="background:linear-gradient(90deg,#a2d5c3 40%,#0a6d7a 40% 60%,#ee5560 60% 80%,#f0b000 80%)"></span>3 · VERDE MENTA RETRÒ</button>
+  </div>
+
+  <div class="scaler" id="scaler"><div class="plugin t-default" id="plugin">
+    <div class="screw" style="left:10px;top:54px"></div><div class="screw" style="right:10px;top:54px"></div>
+    <div class="screw" style="left:10px;bottom:10px"></div><div class="screw" style="right:10px;bottom:10px"></div>
+
+    <div class="topbar">
+      <div class="logo">TWIN<span>·</span>MU<small>VARIABLE-MU COMPRESSOR / LIMITER</small></div>
+      <div class="spacer"></div>
+      <div class="btn">◀</div>
+      <div class="btn preset"><span>Mix Bus Vintage Warmth</span><em>MIX BUS ▾</em></div>
+      <div class="btn">▶</div>
+      <div class="btn">SAVE</div>
+      <div class="seg"><div class="btn on">A</div><div class="btn">B</div></div>
+      <div class="btn">↶</div><div class="btn">↷</div>
+      <div class="btn">OS 2×</div>
+      <div class="btn">ECO</div>
+      <div class="btn" id="themeBtn" title="Tema del pannello (clic per cambiare)" style="cursor:pointer">◐ THEME</div>
+      <div class="btn on">⏻ ON</div>
+    </div>
+
+    <div class="sec" style="left:34px;top:62px;width:1032px;height:196px"><h4>METERS</h4></div>
+    <div class="barmeter" style="left:50px;top:84px;height:156px"><i style="height:62%"></i></div>
+    <div class="barmeter" style="left:63px;top:84px;height:156px"><i style="height:58%"></i></div>
+    <div class="chip" style="left:48px;top:243px">IN</div>
+    <div class="vu" id="vuA" style="left:86px;top:80px;width:300px;height:166px"></div>
+    <div class="screen" id="curve" style="left:404px;top:80px;width:292px;height:166px"></div>
+    <div class="vu" id="vuB" style="left:714px;top:80px;width:300px;height:166px"></div>
+    <div class="barmeter" style="left:1027px;top:84px;height:156px"><i style="height:71%"></i></div>
+    <div class="barmeter" style="left:1040px;top:84px;height:156px"><i style="height:69%"></i></div>
+    <div class="chip" style="left:1022px;top:243px">OUT</div>
+
+    <div class="chip" style="left:36px;top:272px">MODE</div>
+    <div class="mode" style="left:80px;top:266px">
+      <div class="btn">COMPRESSOR</div><div class="btn">LIMITER</div><div class="btn on">VINTAGE</div>
+    </div>
+    <div class="chip" style="left:640px;top:272px">STEREO</div>
+    <div class="mode" style="left:694px;top:266px">
+      <div class="btn on c-sky">LINKED</div><div class="btn">DUAL MONO</div><div class="btn">MID / SIDE</div>
+    </div>
+
+    <div class="sec" id="secA" style="left:34px;top:310px;width:396px;height:216px"><h4><i style="background:var(--teal)"></i>CHANNEL A · LEFT + RIGHT</h4></div>
+    <div class="sec" id="secB" style="left:442px;top:310px;width:396px;height:216px"><h4><i style="background:var(--coral)"></i>CHANNEL B · FOLLOWS A</h4></div>
+    <div class="sec" id="secC" style="left:850px;top:310px;width:216px;height:216px"><h4><i style="background:var(--violet)"></i>CHARACTER</h4></div>
+
+    <div class="tabs" style="left:40px;top:540px"><div class="tab on">SIDECHAIN</div><div class="tab">LIMITER</div><div class="tab">STEREO</div></div>
+    <div class="sec" id="secS" style="left:34px;top:563px;width:1032px;height:104px;border-radius:0 8px 8px 8px"></div>
+
+    <div class="chip" style="left:520px;top:582px">SOURCE</div>
+    <div class="mode" style="left:584px;top:576px"><div class="btn on c-lime">INTERNAL</div><div class="btn">EXTERNAL</div></div>
+    <div class="chip" style="left:520px;top:620px">FILTER</div>
+    <div class="mode" style="left:584px;top:614px"><div class="btn">OFF</div><div class="btn on c-lime">HP</div><div class="btn">LP</div><div class="btn">BP</div></div>
+    <div class="mode" style="left:790px;top:576px"><div class="btn">🎧 SC LISTEN</div></div>
+    <div class="screen" style="left:900px;top:576px;width:150px;height:76px" id="scfilt"></div>
+    <div class="chip" style="left:790px;top:622px">EXT SC <span class="led"></span> &nbsp; CLIP <span class="led"></span></div>
+
+    <div id="knobs"></div>
+  </div></div>
+
+  <div class="legend">
+    <div><b>1 · Ardesia.</b> Pannello scuro blu-grigio, accenti saturi per sezione. La più "da studio notturno": massimo contrasto dei meter, ottima in ambienti bui e dal vivo.</div>
+    <div><b>2 · Crema anni '60.</b> Frontale avorio come l'hardware broadcast d'epoca, manopole nere, accenti petrolio/pomodoro/senape. Allegra ma elegante; richiama il vintage senza copiarlo.</div>
+    <div><b>3 · Verde menta retrò.</b> Il verde acqua delle apparecchiature da studio anni '50–'60, con corallo e giallo. La più allegra e riconoscibile a colpo d'occhio in una sessione piena di plugin.</div>
+    <div><b>In tutte.</b> Display e meter restano scuri per leggibilità; ogni sezione mantiene il suo colore (A, B, Character, Sidechain), così la mappa mentale del plugin non cambia tra i temi. Tutti e tre i temi sono inclusi nel plugin: si cambiano dal pulsante ◐ THEME nella barra in alto.</div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const plugin = $("plugin"), host = $("knobs");
+const cv = n => getComputedStyle(plugin).getPropertyValue("--"+n).trim();
+const hexA = (hex,a) => { const h=hex.replace("#",""); const n=parseInt(h,16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
+
+function knob(x,y,size,label,v,text,opt={}){
+  const r=size/2, a0=-135, a1=135, ang=a0+(a1-a0)*v;
+  const pol=(deg,rad)=>{const t=(deg-90)*Math.PI/180;return [r+rad*Math.cos(t), r+rad*Math.sin(t)]};
+  const arc=(from,to,rad)=>{const [sx,sy]=pol(from,rad),[ex,ey]=pol(to,rad);return `M${sx} ${sy} A${rad} ${rad} 0 ${to-from>180?1:0} 1 ${ex} ${ey}`};
+  const tick=cv("tick"); let ticks="";
+  for(let i=0;i<=10;i++){const d=a0+(a1-a0)*i/10;const [x1,y1]=pol(d,r-1),[x2,y2]=pol(d,r-(i%5?4:7));ticks+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${tick}" stroke-width="1"/>`}
+  const [px,py]=pol(ang,r*0.52), [qx,qy]=pol(ang,r*0.2);
+  const id="k"+Math.random().toString(36).slice(2,7);
+  const accent=cv(opt.color||"sun");
+  const el=document.createElement("div");el.className="knob";el.style.left=(x-r-10)+"px";el.style.top=y+"px";el.style.width=(size+20)+"px";
+  if(opt.dim) el.style.opacity=.72;
+  el.innerHTML=`<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <defs><radialGradient id="${id}" cx="38%" cy="30%" r="75%"><stop offset="0" stop-color="#6b6e72"/><stop offset=".55" stop-color="#2a2c2f"/><stop offset="1" stop-color="#111214"/></radialGradient>
+    <radialGradient id="${id}c" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#f2f2f0"/><stop offset=".6" stop-color="#9c9ea0"/><stop offset="1" stop-color="#4d4f52"/></radialGradient></defs>
+    ${ticks}
+    <path d="${arc(a0,a1,r-10)}" stroke="rgba(0,0,0,.45)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="${arc(a0,ang,r-10)}" stroke="${accent}" stroke-width="3.5" fill="none" stroke-linecap="round" style="filter:drop-shadow(0 0 3px ${hexA(accent,.8)})"/>
+    <circle cx="${r}" cy="${r+2}" r="${r-14}" fill="#000" opacity=".4"/>
+    <circle cx="${r}" cy="${r}" r="${r-14}" fill="url(#${id})" stroke="${accent}" stroke-opacity=".6" stroke-width="1.5"/>
+    <circle cx="${r}" cy="${r}" r="${(r-14)*0.55}" fill="url(#${id}c)" opacity=".9"/>
+    <line x1="${qx}" y1="${qy}" x2="${px}" y2="${py}" stroke="${accent}" stroke-width="2.6" stroke-linecap="round"/>
+  </svg><div class="lbl">${label}</div><div class="val" style="color:${accent}">${text}</div>`;
+  host.appendChild(el);
+}
+const TC=["TC1","TC2","TC3","TC4","TC5","TC6","VAR"];
+
+function vu(el,gr,label,col){
+  const w=300,h=166,cx=w/2,cy=h+52,R=170;
+  const ang=g=>{const t=Math.min(1,Math.max(0,-g/20)); return 42-84*Math.sqrt(t)};
+  const pt=(deg,rad)=>{const t=(deg-90)*Math.PI/180;return [cx+rad*Math.cos(t),cy+rad*Math.sin(t)]};
+  let s="";
+  [0,1,2,3,5,7,10,15,20].forEach(g=>{const a=ang(-g);const [x1,y1]=pt(a,R),[x2,y2]=pt(a,R-(g%5?8:13));
+    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#2a2016" stroke-width="${g%5?1:1.6}"/>`;
+    const [tx,ty]=pt(a,R-24);s+=`<text x="${tx}" y="${ty}" font-size="10" text-anchor="middle" fill="#2a2016" font-family="Consolas">${g}</text>`});
+  const [ax,ay]=pt(42,R),[bx,by]=pt(-42,R),[nx,ny]=pt(ang(gr),R+4);
+  el.innerHTML=`<svg width="${w}" height="${h}">
+    <defs><radialGradient id="face${label}" cx="50%" cy="85%" r="85%"><stop offset="0" stop-color="#fde6b0"/><stop offset=".6" stop-color="#f1c779"/><stop offset="1" stop-color="#b9873a"/></radialGradient></defs>
+    <rect width="${w}" height="${h}" fill="url(#face${label})"/>
+    <path d="M${bx} ${by} A${R} ${R} 0 0 1 ${ax} ${ay}" stroke="#2a2016" stroke-width="1.2" fill="none"/>
+    ${s}
+    <text x="${cx}" y="${h-46}" font-size="11" text-anchor="middle" fill="#2a2016" letter-spacing="3" font-weight="700">GAIN REDUCTION</text>
+    <text x="${cx}" y="${h-32}" font-size="9" text-anchor="middle" fill="#5a4426" letter-spacing="2">CHANNEL ${label} · dB</text>
+    <text x="${w-14}" y="${h-14}" font-size="15" text-anchor="end" fill="#2a2016" font-family="Consolas" font-weight="700">${gr.toFixed(1)}</text>
+    <line x1="${cx}" y1="${cy}" x2="${nx}" y2="${ny}" stroke="#1a1410" stroke-width="1.6"/>
+    <rect y="${h-7}" width="${w}" height="7" fill="${col}"/>
+    <rect width="${w}" height="5" fill="${col}"/>
+    <circle cx="16" cy="20" r="5" fill="${col}" style="filter:drop-shadow(0 0 4px ${col})"/>
+    <path d="M0 0 H${w} V40 Q${w/2} 70 0 40Z" fill="#fff" opacity=".10"/>
+  </svg>`;
+}
+
+function curve(){
+  const el=$("curve"),w=292,h=166,p=16, a=cv("teal"), v=cv("violet"), c=cv("coral");
+  const X=d=>p+(d+60)/60*(w-2*p), Y=d=>h-p-(d+60)/60*(h-2*p);
+  let grid="";for(let d=-60;d<=0;d+=12){grid+=`<line x1="${X(d)}" y1="${p}" x2="${X(d)}" y2="${h-p}" stroke="#1d2b24"/><line x1="${p}" y1="${Y(d)}" x2="${w-p}" y2="${Y(d)}" stroke="#1d2b24"/>`}
+  const T=-22.4;let path="";
+  for(let i=0;i<=120;i++){const x=-60+i*0.5;const over=x-T;const y= over<=0? x : T+over/(1+0.18*over);
+    path+=(i?"L":"M")+X(x).toFixed(1)+" "+Y(y).toFixed(1)}
+  const wx=-14, over=wx-T, wy=T+over/(1+0.18*over);
+  el.innerHTML=`<svg width="${w}" height="${h}"><defs><linearGradient id="cg" x1="0" x2="1"><stop offset="0" stop-color="#2ed3c0"/><stop offset=".6" stop-color="#a98bff"/><stop offset="1" stop-color="#ff6b7a"/></linearGradient></defs>${grid}
+   <line x1="${X(-60)}" y1="${Y(-60)}" x2="${X(0)}" y2="${Y(0)}" stroke="#2f4a3c" stroke-dasharray="3 3"/>
+   <line x1="${X(T)}" y1="${p}" x2="${X(T)}" y2="${h-p}" stroke="#f3a83c" stroke-opacity=".45" stroke-dasharray="2 3"/>
+   <path d="${path}" stroke="url(#cg)" stroke-width="2.5" fill="none" style="filter:drop-shadow(0 0 3px rgba(169,139,255,.7))"/>
+   <circle cx="${X(wx)}" cy="${Y(wy)}" r="4.5" fill="#f3a83c" style="filter:drop-shadow(0 0 5px #f3a83c)"/>
+   <text x="${p+2}" y="${p+9}" font-size="9" fill="#5f8f74" font-family="Consolas" letter-spacing="1">TRANSFER · VARIABLE-MU</text>
+   <text x="${w-p}" y="${h-4}" font-size="8" fill="#5f8f74" font-family="Consolas" text-anchor="end">IN dB →</text>
+  </svg>`;
+}
+
+function scFilter(){
+  const el=$("scfilt"),w=150,h=76;let d="";
+  for(let i=0;i<=75;i++){const f=20*Math.pow(1000,i/75),fc=95;const m=Math.pow(f/fc,2)/Math.sqrt(Math.pow(1-Math.pow(f/fc,2),2)+Math.pow(f/fc/0.71,2));
+    const db=Math.max(-36,20*Math.log10(m));d+=(i?"L":"M")+(i*2).toFixed(1)+" "+(14-db*1.6).toFixed(1)}
+  el.innerHTML=`<svg width="${w}" height="${h}"><path d="${d}" stroke="#b6ea5a" stroke-width="1.6" fill="none"/>
+  <text x="6" y="70" font-size="8" fill="#5f8f74" font-family="Consolas">SC HP 95 Hz</text></svg>`;
+}
+
+function render(){
+  host.innerHTML="";
+  const t=parseFloat(cv("tint"));
+  $("secA").style.background=`linear-gradient(180deg,${hexA(cv("teal"),t)},${hexA(cv("teal"),t/5)})`;
+  $("secB").style.background=`linear-gradient(180deg,${hexA(cv("coral"),t)},${hexA(cv("coral"),t/5)})`;
+  $("secC").style.background=`linear-gradient(180deg,${hexA(cv("violet"),t)},${hexA(cv("orange"),t/3)})`;
+  $("secS").style.background=`linear-gradient(180deg,${hexA(cv("lime"),t*.8)},${hexA(cv("lime"),t/5)})`;
+  const A={color:"teal"}, B={color:"coral",dim:1}, S={color:"lime"};
+  knob(110,324,84,"THRESHOLD",0.62,"−22.4 dB",A);
+  knob(240,324,84,"RATIO",0.38,"4.0 : 1",A);
+  knob(370,336,58,"TIME CONST",1/6,"TC2",A);
+  knob(96,440,56,"ATTACK",0.25,"0.2 ms",A);
+  knob(176,440,56,"RELEASE",0.45,"0.8 s",A);
+  knob(256,440,56,"MAKEUP",0.25,"+3.5 dB",A);
+  knob(336,440,56,"KNEE",0.4,"9.6 dB",A);
+  knob(518,324,84,"THRESHOLD",0.62,"−22.4 dB",B);
+  knob(648,324,84,"RATIO",0.38,"4.0 : 1",B);
+  knob(778,336,58,"TIME CONST",1/6,"TC2",B);
+  knob(504,440,56,"ATTACK",0.25,"0.2 ms",B);
+  knob(584,440,56,"RELEASE",0.45,"0.8 s",B);
+  knob(664,440,56,"MAKEUP",0.25,"+3.5 dB",B);
+  knob(744,440,56,"LINK A→B",1,"ON",{color:"sky"});
+  knob(910,326,64,"TUBE",0.45,"45 %",{color:"orange"});
+  knob(1006,326,64,"TRANSFORMER",0.3,"30 %",{color:"violet"});
+  knob(910,424,64,"MIX",0.85,"85 %",{color:"sun"});
+  knob(1006,424,64,"OUTPUT",0.52,"+1.0 dB",{color:"sky"});
+  const scY=574, ks=58;
+  knob(98,scY,ks,"SC FREQ",0.22,"95 Hz",S);
+  knob(188,scY,ks,"SC Q",0.18,"0.71",S);
+  knob(278,scY,ks,"SENSITIVITY",0.5,"0.0 dB",S);
+  knob(368,scY,ks,"SC MIX",0,"INT",S);
+  knob(458,scY,ks,"FREQ-DEP",0.62,"+1.5 dB",S);
+  vu($("vuA"),-4.6,"A",cv("teal")); vu($("vuB"),-4.2,"B",cv("coral"));
+  curve(); scFilter();
+}
+
+document.querySelectorAll("#themes button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#themes button").forEach(x=>x.classList.toggle("on",x===b));
+  plugin.className="plugin "+b.dataset.t; render();
+}));
+
+$("themeBtn").addEventListener("click",()=>{ // in-plugin theme switch: cycles the three themes
+  const bs=[...document.querySelectorAll("#themes button")];
+  const i=bs.findIndex(b=>b.classList.contains("on"));
+  bs[(i+1)%bs.length].click();
+});
+
+function fit(){const s=$("scaler").clientWidth/1100;plugin.style.transform=`scale(${s})`}
+addEventListener("resize",fit);fit();render();
+</script>
+</body>
+</html>
