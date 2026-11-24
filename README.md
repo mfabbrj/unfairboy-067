@@ -8,6 +8,18 @@ The DSP engine (`Source/DSP`) is framework-independent and covered by its own te
 
 ![Unfairboy 067](Documentation/Screenshots/unfairboy_ardesia.png)
 
+## Download
+
+Current version: **v0.1.0 (beta)** — [release notes](https://github.com/mfabbrj/unfairboy-067/releases/tag/v0.1.0) · [all releases](https://github.com/mfabbrj/unfairboy-067/releases)
+
+| Platform | Download | Contents |
+|---|---|---|
+| **macOS** (Apple Silicon + Intel, macOS 11+) | [Unfairboy067-0.1.0-macOS.zip](https://github.com/mfabbrj/unfairboy-067/releases/download/v0.1.0/Unfairboy067-0.1.0-macOS.zip) | VST3, AU, Standalone |
+| **Windows** (64-bit, Windows 10+) | [Unfairboy067-0.1.0-Windows.zip](https://github.com/mfabbrj/unfairboy-067/releases/download/v0.1.0/Unfairboy067-0.1.0-Windows.zip) | VST3, Standalone |
+
+Each zip contains an `INSTALL.txt`. The builds are not notarized (macOS) or code-signed (Windows), so the
+operating system asks for confirmation the first time: see `INSTALL.txt`.
+
 ## Audio features
 
 - **Modes:** Compressor (feed-forward, soft knee), Limiter, Vintage (feedback topology, variable-mu curve whose ratio grows with level)
