@@ -134,3 +134,17 @@ host, feeding test audio so meters and curve show a working point.
 
 DSP engine tested (see `Documentation/03_Fase2_Report_DSP.md`). Plugin builds without warnings on MSVC.
 Not yet done: DAW compatibility testing and pluginval, sound tuning by critical listening, installer, user manual.
+
+## License
+
+Copyright (C) 2026 Manuel Fabbri
+
+This program is free software: you can redistribute it and/or modify it under the terms of the
+GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License,
+or (at your option) any later version. See [`LICENSE`](LICENSE) for the full text.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Third-party components keep their own licenses: JUCE 8 (AGPLv3 / commercial) and doctest (MIT) are downloaded
+at build time. Building the AAX format requires Avid's AAX SDK and its separate license.
