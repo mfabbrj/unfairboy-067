@@ -132,8 +132,9 @@ host, feeding test audio so meters and curve show a working point.
 
 ## Status
 
-DSP engine tested (see `Documentation/03_Fase2_Report_DSP.md`). Plugin builds without warnings on MSVC.
-Not yet done: DAW compatibility testing and pluginval, sound tuning by critical listening, installer, user manual.
+DSP engine tested (see `Documentation/03_Fase2_Report_DSP.md`). Plugin builds without warnings on MSVC
+and has been tested successfully in FL Studio.
+Not yet done: testing in other DAWs and pluginval, sound tuning by critical listening, installer, user manual.
 
 ## License
 

@@ -1,0 +1,86 @@
+# Builds the macOS plugin (universal: Apple Silicon + Intel), runs the DSP tests and, on a version tag,
+# attaches the zip to a GitHub pre-release. Manual runs only build and keep the zip as a workflow artifact.
+name: macOS build
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    runs-on: macos-14
+    env:
+      ARTEFACTS: build/Plugin/TwinMu_artefacts/Release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: >
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DTWINMU_BUILD_PLUGIN=ON
+          "-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64" -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+
+      - name: Build
+        run: cmake --build build --parallel --target twinmu_tests TwinMu_VST3 TwinMu_AU TwinMu_Standalone
+
+      - name: DSP tests
+        run: ./build/twinmu_tests
+
+      - name: Ad-hoc sign
+        run: |
+          for b in "$ARTEFACTS/VST3/Unfairboy 067.vst3" "$ARTEFACTS/AU/Unfairboy 067.component" "$ARTEFACTS/Standalone/Unfairboy 067.app"; do
+            codesign --force --deep --sign - "$b"
+          done
+
+      - name: Package
+        id: package
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          [[ "$GITHUB_REF_TYPE" == "tag" ]] || VERSION="dev-${GITHUB_SHA::7}"
+          NAME="Unfairboy067-${VERSION}-macOS"
+          mkdir -p "dist/$NAME"
+          cp -R "$ARTEFACTS/VST3/Unfairboy 067.vst3" "$ARTEFACTS/AU/Unfairboy 067.component" \
+                "$ARTEFACTS/Standalone/Unfairboy 067.app" LICENSE "dist/$NAME/"
+          cat > "dist/$NAME/INSTALL.txt" <<'EOF'
+          Unfairboy 067 - macOS (Apple Silicon + Intel, macOS 11 or later)
+
+          1. Copy the plugins:
+             Unfairboy 067.vst3       ->  ~/Library/Audio/Plug-Ins/VST3/
+             Unfairboy 067.component  ->  ~/Library/Audio/Plug-Ins/Components/
+             Unfairboy 067.app        ->  /Applications/   (standalone, optional)
+
+          2. The build is not notarized by Apple, so macOS blocks it on first use.
+             Unblock it once in Terminal:
+             xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/"Unfairboy 067.vst3"
+             xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/Components/"Unfairboy 067.component"
+             xattr -dr com.apple.quarantine /Applications/"Unfairboy 067.app"
+
+          3. Rescan plugins in your DAW.
+          EOF
+          (cd dist && ditto -c -k --norsrc --noextattr --keepParent "$NAME" "$NAME.zip")
+          echo "zip=dist/$NAME.zip" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-build
+          path: ${{ steps.package.outputs.zip }}
+
+      - name: Publish pre-release
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          prerelease: true
+          files: ${{ steps.package.outputs.zip }}
+          body: |
+            First public beta of Unfairboy 067, a variable-mu compressor / limiter.
+            Tested in FL Studio; other DAWs not yet verified.
+
+            **macOS:** download the zip below (VST3, AU and Standalone, Apple Silicon + Intel, macOS 11+).
+            The build is not notarized: follow `INSTALL.txt` inside the zip to unblock it.
+
+            **Windows:** VST3 and Standalone will be added to this release.
+
+            Licensed under AGPLv3, source code in this repository.
